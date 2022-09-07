@@ -4,7 +4,7 @@ import { Route, Switch } from 'react-router-dom';
 /** Custom Components */
 import Home from './components/Home';
 import WorkOrders from './components/WorkOrders/WorkOrders';
-import WorkOrder from './components/WorkOrders/WorkOrder';
+import WorkOrder from './components/WorkOrders/WorkOrder/WorkOrder';
 import CreateWorkOrder from './components/WorkOrders/CreateWorkOrder';
 import Productivity from './components/Productivity/Productivity';
 import Layout from './components/Layout';

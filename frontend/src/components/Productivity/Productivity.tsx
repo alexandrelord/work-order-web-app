@@ -15,7 +15,8 @@ const Productivity: FunctionComponent = () => {
         (async () => {
             try {
                 const response = await getProductivity();
-                setProductivity(response.response);
+
+                setProductivity(response.users);
                 if (productivity.length === 0) {
                     setErrorMsg('No productivity data found');
                 }

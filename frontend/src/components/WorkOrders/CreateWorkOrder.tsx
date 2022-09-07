@@ -44,7 +44,7 @@ const CreateWorkOrder: FunctionComponent = () => {
 
         try {
             const response = await createWorkOrder(newWorkOrder);
-            console.log(response);
+
             if (response === 201) {
                 setErrorMsg('');
                 setName('');

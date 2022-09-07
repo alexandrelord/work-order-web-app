@@ -58,15 +58,15 @@ const showWorkOrder = async (req: Request, res: Response, next: NextFunction) =>
 };
 
 const createWorkOrder = async (req: Request, res: Response, next: NextFunction) => {
-    const { workOrderName } = req.body.workOrder;
+    const { workOrderName } = req.body;
     const { assignees } = req.body;
 
     try {
         const response = await sql('INSERT INTO work_orders (name, status) VALUES (?, "OPEN") RETURNING *', workOrderName);
         const workOrderId = response[0].id;
 
-        assignees.forEach(async (assignee: any) => {
-            await sql('INSERT INTO work_order_assignees (work_order_id, user_id) VALUES (?, ?)', workOrderId, assignee.id);
+        assignees.forEach(async (assigneeId: any) => {
+            await sql('INSERT INTO work_order_assignees (work_order_id, user_id) VALUES (?, ?)', workOrderId, assigneeId);
         });
 
         return res.status(201).json({ message: 'Work order created successfully' });
