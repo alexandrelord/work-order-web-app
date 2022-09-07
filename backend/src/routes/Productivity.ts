@@ -1,8 +1,8 @@
 import express from 'express';
-import { getUsers } from '../controllers/Productivity';
+import { getInactiveUsers } from '../controllers/Productivity';
 
 const router = express.Router();
 
-router.get('/', getUsers);
+router.get('/', getInactiveUsers);
 
 export = router;

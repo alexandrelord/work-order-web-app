@@ -10,7 +10,7 @@ const getWorkOrders = async (req: Request, res: Response, next: NextFunction) =>
         if (response.length > 0) {
             return res.status(200).json({ workOrders: response });
         } else {
-            res.status(404).json({ message: 'No work orders found' });
+            return res.status(404).json({ message: 'No work orders found' });
         }
     } catch (error) {
         return res.status(500).json({ error });
