@@ -1,28 +1,30 @@
 import { FunctionComponent, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 /** MUI Components */
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridEventListener } from '@mui/x-data-grid';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
+/** Types */
+import { IWorkOrder } from '../../types';
+
 interface WorkOrderProps {
-    workorders: any[];
+    workorders: IWorkOrder[];
 }
 
 const WorkOrdersTable: FunctionComponent<WorkOrderProps> = ({ workorders }) => {
     const [rowId, setRowId] = useState<number>(0);
-    let columns: GridColDef[] = [];
-    let rows: any[] = [];
-
-    columns = [
+    const columns: GridColDef[] = [
         { field: 'name', headerName: 'Name', width: 250 },
         { field: 'status', headerName: 'Status', width: 150 }
     ];
+    const rows: IWorkOrder[] = [];
+    const history = useHistory();
 
-    workorders.forEach((workorder: any) => {
+    workorders.forEach((workorder: IWorkOrder) => {
         rows.push({
             id: workorder.id,
             name: workorder.name,
@@ -30,8 +32,8 @@ const WorkOrdersTable: FunctionComponent<WorkOrderProps> = ({ workorders }) => {
         });
     });
 
-    const handleRowClick = (row: any) => {
-        setRowId(row.id);
+    const handleRowClick: GridEventListener<'rowClick'> = (params) => {
+        history.push(`/workorders/${params.row.id}`);
     };
 
     return (
@@ -42,10 +44,6 @@ const WorkOrdersTable: FunctionComponent<WorkOrderProps> = ({ workorders }) => {
                     Work Orders{' '}
                 </Typography>
                 <DataGrid rows={rows} columns={columns} pageSize={5} rowsPerPageOptions={[5]} onRowClick={handleRowClick} />
-                <Button type="submit" variant="contained" component={Link} to={`workorders/${rowId}`} sx={{ mt: 5, mr: 5 }}>
-                    {' '}
-                    Go To Work Order
-                </Button>
             </Box>
         </Container>
     );
@@ -54,5 +52,5 @@ const WorkOrdersTable: FunctionComponent<WorkOrderProps> = ({ workorders }) => {
 export default WorkOrdersTable;
 
 <Button component={Link} to="/" color="inherit">
-                        Home
-                    </Button>
+    Home
+</Button>;

@@ -1,4 +1,4 @@
-const BASE_URL = 'http://localhost:4000/api/workorders';
+const BASE_URL = '/api/workorders';
 
 export const getWorkOrders = async () => {
     const options = {

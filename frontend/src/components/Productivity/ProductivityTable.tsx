@@ -11,14 +11,12 @@ interface ProductivityProps {
 }
 
 const ProductivityTable: FunctionComponent<ProductivityProps> = ({ productivity }) => {
-    let columns: GridColDef[] = [];
-    let rows: any[] = [];
-
-    columns = [
+    const columns: GridColDef[] = [
         { field: 'id', headerName: 'Id', width: 75 },
         { field: 'name', headerName: 'Name', width: 150 },
         { field: 'email', headerName: 'Email', width: 250 }
     ];
+    const rows: any[] = [];
 
     productivity.forEach((prod: any) => {
         rows.push({

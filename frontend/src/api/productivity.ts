@@ -1,4 +1,4 @@
-const BASE_URL = 'http://localhost:4000/api/productivity';
+const BASE_URL = '/api/productivity';
 
 export const getProductivity = async () => {
     const options = {

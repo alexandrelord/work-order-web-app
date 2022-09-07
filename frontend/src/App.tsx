@@ -11,15 +11,15 @@ import Layout from './components/Layout';
 
 const App: FunctionComponent = () => {
     return (
-        <Switch>
-            <Layout>
+        <Layout>
+            <Switch>
                 <Route exact path="/" component={Home} />
                 <Route exact path="/workorders" component={WorkOrders} />
-                <Route exact path="/workorders/:id" component={WorkOrder} />
                 <Route exact path="/workorder/new" component={CreateWorkOrder} />
+                <Route exact path="/workorders/:id" component={WorkOrder} />
                 <Route exact path="/productivity" component={Productivity} />
-            </Layout>
-        </Switch>
+            </Switch>
+        </Layout>
     );
 };
 

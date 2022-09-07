@@ -1,4 +1,4 @@
-import { FunctionComponent, useState, useEffect } from 'react';
+import { FunctionComponent, useState, useEffect, ReactNode } from 'react';
 import { useParams } from 'react-router-dom';
 
 /** Service Functions */
@@ -10,12 +10,17 @@ import AlertMessage from '../../AlertMessage';
 /** CSS module */
 import './WorkOrder.css';
 
+/** Types */
+import { IWorkOrder, IUser } from '../../../types';
+
+interface IParamsType {
+    id: string;
+}
+
 const WorkOrder: FunctionComponent = () => {
-    const [workOrder, setWorkOrder] = useState<any>({});
+    const [workOrder, setWorkOrder] = useState<IWorkOrder>({} as IWorkOrder);
     const [errorMsg, setErrorMsg] = useState<string>('');
-    const params: any = useParams();
-    const id: string = params.id;
-    let assignees: any;
+    const { id } = useParams<IParamsType>();
 
     useEffect(() => {
         (async () => {
@@ -25,20 +30,9 @@ const WorkOrder: FunctionComponent = () => {
             } catch (error) {
                 setErrorMsg('Something went wrong. Please try again later.');
             }
-            return () => {};
+            // return () => {};
         })();
     }, []);
-
-    if (workOrder.assignees) {
-        assignees = workOrder.assignees.map((assignee: any) => {
-            return (
-                <p className="tooltip" key={assignee.id}>
-                    {assignee.name}
-                    <span className="tooltipText">{assignee.email}</span>
-                </p>
-            );
-        });
-    }
 
     const handleChangeStatus = async () => {
         try {
@@ -72,7 +66,16 @@ const WorkOrder: FunctionComponent = () => {
                         <hr />
                         <div className="assignees">
                             <h3>Assignees:</h3>
-                            <div className='assignee'>{assignees}</div>
+                            <div className="assignee">
+                                {workOrder.assignees
+                                    ? workOrder.assignees.map((assignee: IUser) => (
+                                          <p className="tooltip" key={assignee.id}>
+                                              {assignee.name}
+                                              <span className="tooltipText">{assignee.email}</span>
+                                          </p>
+                                      ))
+                                    : null}
+                            </div>
                         </div>
                     </div>
                 </div>

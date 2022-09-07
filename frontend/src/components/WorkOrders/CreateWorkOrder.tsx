@@ -37,7 +37,7 @@ const CreateWorkOrder: FunctionComponent = () => {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        let newWorkOrder = {
+        const newWorkOrder = {
             workOrderName: name,
             assignees: assignees
         };

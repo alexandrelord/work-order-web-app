@@ -24,7 +24,10 @@
     "@types/react": "17.0.40",
     "@types/react-dom": "17.0.13",
     "@types/react-router-dom": "^5.3.3",
-    "cross-env": "^7.0.3"
+    "@typescript-eslint/eslint-plugin": "^5.36.2",
+    "@typescript-eslint/parser": "^5.36.2",
+    "cross-env": "^7.0.3",
+    "eslint": "^8.23.0"
   },
   "scripts": {
     "start": "cross-env PORT=3137 react-scripts start",
