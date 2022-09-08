@@ -65,6 +65,7 @@ const createWorkOrder = async (req: Request, res: Response, next: NextFunction) 
         const response = await sql('INSERT INTO work_orders (name, status) VALUES (?, "OPEN") RETURNING *', workOrderName);
         const workOrderId = response[0].id;
 
+        // REVISE: do SQL query only once instead of for each assignee!!
         assignees.forEach(async (assigneeId: any) => {
             await sql('INSERT INTO work_order_assignees (work_order_id, user_id) VALUES (?, ?)', workOrderId, assigneeId);
         });
