@@ -1,10 +1,10 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response } from 'express';
 import sql from '../db';
 
-const getUsers = async (req: Request, res: Response, next: NextFunction) => {
+const getUsers = async (req: Request, res: Response) => {
     try {
         // Get all users
-        const response: any = await sql('SELECT * FROM users');
+        const response = await sql('SELECT * FROM users');
 
         if (response.length > 0) {
             return res.status(200).json({ users: response });

@@ -1,10 +1,10 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response } from 'express';
 import sql from '../db';
 
-const getInactiveUsers = async (req: Request, res: Response, next: NextFunction) => {
+const getInactiveUsers = async (req: Request, res: Response) => {
     try {
         // Get all users who are not assigned to any open work order
-        const response: any = await sql('SELECT * FROM users WHERE id NOT IN (SELECT user_id FROM work_order_assignees WHERE work_order_id IN (SELECT id FROM work_orders WHERE status = "OPEN"))');
+        const response = await sql('SELECT * FROM users WHERE id NOT IN (SELECT user_id FROM work_order_assignees WHERE work_order_id IN (SELECT id FROM work_orders WHERE status = "OPEN"))');
 
         if (response.length > 0) {
             return res.status(200).json({ users: response });

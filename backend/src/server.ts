@@ -2,6 +2,10 @@ import express, { Request, Response, NextFunction, Express } from 'express';
 import chalk from 'chalk';
 import logger from './utils/logger';
 
+import productivityRoutes from './routes/Productivity';
+import userRoutes from './routes/User';
+import workOrderRoutes from './routes/WorkOrder';
+
 const app: Express = express();
 
 /** Middleware */
@@ -21,15 +25,15 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 });
 
 /** Routes */
-app.use('/api/workorders', require('./routes/WorkOrder'));
-app.use('/api/productivity', require('./routes/Productivity'));
-app.use('/api/users', require('./routes/User'));
+app.use('/api/workorders', workOrderRoutes);
+app.use('/api/productivity', productivityRoutes);
+app.use('/api/users', userRoutes);
 
 /** Health Check */
 app.get('/ping', (req: Request, res: Response) => res.status(200).json({ message: 'pong' }));
 
-/** Error handling */
-app.use((req: Request, res: Response, next: NextFunction) => {
+/** Error Handling */
+app.use((req: Request, res: Response) => {
     const error = new Error('Not found');
     return res.status(404).json({
         message: error.message

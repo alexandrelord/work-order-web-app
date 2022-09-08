@@ -1,7 +1,8 @@
-import { Request, Response, NextFunction } from 'express';
-import sql from '../db';
+import { Request, Response } from 'express';
+import sql from '../../db';
+import { IAssignees, IWorkOrder } from './types';
 
-const getWorkOrders = async (req: Request, res: Response, next: NextFunction) => {
+const getWorkOrders = async (req: Request, res: Response) => {
     try {
         // Get all work orders and order them by status (open, closed, other)
         const response = await sql('SELECT * FROM work_orders ORDER BY CASE WHEN status = "OPEN" THEN 1 WHEN status = "CLOSED" THEN 2 ELSE 3 END');
@@ -11,12 +12,12 @@ const getWorkOrders = async (req: Request, res: Response, next: NextFunction) =>
         } else {
             return res.status(404).json({ message: 'No work orders found.' });
         }
-    } catch (error: any) {
+    } catch (error) {
         return res.status(500).json({ message: 'Something went wrong. Please try again later.' });
     }
 };
 
-const showWorkOrder = async (req: Request, res: Response, next: NextFunction) => {
+const showWorkOrder = async (req: Request, res: Response) => {
     const { id } = req.params;
 
     try {
@@ -35,7 +36,7 @@ const showWorkOrder = async (req: Request, res: Response, next: NextFunction) =>
             };
             return res.status(200).json({ workOrder });
         } else {
-            const assignees: any[] = response.map((assignee: any) => {
+            const assignees: IAssignees[] = response.map((assignee) => {
                 return {
                     id: assignee.userId,
                     name: assignee.userName,
@@ -43,7 +44,7 @@ const showWorkOrder = async (req: Request, res: Response, next: NextFunction) =>
                 };
             });
             // If there are assigneesId, return work order with array of assigneesId
-            const workOrder: { id: number; name: string; status: string; assignees: any[] } = {
+            const workOrder: IWorkOrder = {
                 id: response[0].workOrderId,
                 name: response[0].workOrderName,
                 status: response[0].workOrderStatus,
@@ -56,7 +57,7 @@ const showWorkOrder = async (req: Request, res: Response, next: NextFunction) =>
     }
 };
 
-const createWorkOrder = async (req: Request, res: Response, next: NextFunction) => {
+const createWorkOrder = async (req: Request, res: Response) => {
     const { workOrderName } = req.body;
     const { assigneesId } = req.body;
 
@@ -65,7 +66,7 @@ const createWorkOrder = async (req: Request, res: Response, next: NextFunction) 
         const workOrderId = response[0].id;
 
         // REVISE: do SQL query only once instead of for each assignee!!
-        assigneesId.forEach(async (assigneeId: any) => {
+        assigneesId.forEach(async (assigneeId: number) => {
             await sql('INSERT INTO work_order_assignees (work_order_id, user_id) VALUES (?, ?)', workOrderId, assigneeId);
         });
 
@@ -75,7 +76,7 @@ const createWorkOrder = async (req: Request, res: Response, next: NextFunction) 
     }
 };
 
-const updateWorkOrder = async (req: Request, res: Response, next: NextFunction) => {
+const updateWorkOrder = async (req: Request, res: Response) => {
     const { id } = req.params;
     const { status } = req.body;
     try {
