@@ -29,9 +29,8 @@ const WorkOrder: FunctionComponent = () => {
                 const response = await api({ url: `/api/workorders/${id}`, method: 'GET' });
                 response.workOrder && setWorkOrder(response.workOrder);
             } catch (error) {
-                setErrorMsg('Something went wrong. Please try again later.');
+                error instanceof Error && setErrorMsg(error.message);
             }
-            // return () => {};
         })();
     }, []);
 
@@ -40,7 +39,7 @@ const WorkOrder: FunctionComponent = () => {
             const response = await api({ url: `/api/workorders/${id}`, method: 'PATCH', data: { status: workOrder.status === 'OPEN' ? 'CLOSED' : 'OPEN' } });
             response.workOrder && setWorkOrder({ ...workOrder, status: response.workOrder[0].status });
         } catch (error) {
-            setErrorMsg('Something went wrong. Please try again later.');
+            error instanceof Error && setErrorMsg(error.message);
         }
     };
 

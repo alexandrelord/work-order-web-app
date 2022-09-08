@@ -4,16 +4,15 @@ import sql from '../db';
 const getWorkOrders = async (req: Request, res: Response, next: NextFunction) => {
     try {
         // Get all work orders and order them by status (open, closed, other)
-        // Could I sort the response instead of using SQL to sort?
         const response = await sql('SELECT * FROM work_orders ORDER BY CASE WHEN status = "OPEN" THEN 1 WHEN status = "CLOSED" THEN 2 ELSE 3 END');
 
         if (response.length > 0) {
             return res.status(200).json({ workOrders: response });
         } else {
-            return res.status(404).json({ message: 'No work orders found' });
+            return res.status(404).json({ message: 'No work orders found.' });
         }
-    } catch (error) {
-        return res.status(500).json({ error });
+    } catch (error: any) {
+        return res.status(500).json({ message: 'Something went wrong. Please try again later.' });
     }
 };
 
@@ -28,7 +27,7 @@ const showWorkOrder = async (req: Request, res: Response, next: NextFunction) =>
         );
 
         if (response[0].userId === null) {
-            // If there are no assignees, return work order with no assignees
+            // If there are no assigneesId, return work order with no assigneesId
             const workOrder: { id: number; name: string; status: string } = {
                 id: response[0].workOrderId,
                 name: response[0].workOrderName,
@@ -43,7 +42,7 @@ const showWorkOrder = async (req: Request, res: Response, next: NextFunction) =>
                     email: assignee.userEmail
                 };
             });
-            // If there are assignees, return work order with array of assignees
+            // If there are assigneesId, return work order with array of assigneesId
             const workOrder: { id: number; name: string; status: string; assignees: any[] } = {
                 id: response[0].workOrderId,
                 name: response[0].workOrderName,
@@ -53,26 +52,26 @@ const showWorkOrder = async (req: Request, res: Response, next: NextFunction) =>
             return res.status(200).json({ workOrder });
         }
     } catch (error) {
-        return res.status(500).json({ error });
+        return res.status(500).json({ message: 'Something went wrong. Please try again later.' });
     }
 };
 
 const createWorkOrder = async (req: Request, res: Response, next: NextFunction) => {
     const { workOrderName } = req.body;
-    const { assignees } = req.body;
+    const { assigneesId } = req.body;
 
     try {
         const response = await sql('INSERT INTO work_orders (name, status) VALUES (?, "OPEN") RETURNING *', workOrderName);
         const workOrderId = response[0].id;
 
         // REVISE: do SQL query only once instead of for each assignee!!
-        assignees.forEach(async (assigneeId: any) => {
+        assigneesId.forEach(async (assigneeId: any) => {
             await sql('INSERT INTO work_order_assignees (work_order_id, user_id) VALUES (?, ?)', workOrderId, assigneeId);
         });
 
-        return res.status(201).json({ message: 'Work order created successfully' });
+        return res.status(201).json({ message: 'Work order created successfully!' });
     } catch (error) {
-        return res.status(500).json({ message: error });
+        return res.status(500).json({ message: 'Something went wrong. Please try again later.' });
     }
 };
 
@@ -84,7 +83,7 @@ const updateWorkOrder = async (req: Request, res: Response, next: NextFunction) 
         const response = await sql('UPDATE work_orders SET status = ? WHERE id = ? RETURNING *', status, Number(id));
         return res.status(200).json({ workOrder: response });
     } catch (error) {
-        return res.status(500).json({ error });
+        return res.status(500).json({ message: 'Something went wrong. Please try again later.' });
     }
 };
 

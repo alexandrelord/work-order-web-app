@@ -12,7 +12,7 @@ import { IWorkOrder } from '../../types';
 
 const WorkOrders: FunctionComponent = () => {
     const [workorders, setWorkorders] = useState<IWorkOrder[]>([] as IWorkOrder[]);
-    const [errorMsg, setErrorMsg] = useState<string>(''); // create useHook since it appears in multiple places? or too simple for that?
+    const [errorMsg, setErrorMsg] = useState<string>('');
 
     useEffect(() => {
         (async () => {
@@ -20,8 +20,7 @@ const WorkOrders: FunctionComponent = () => {
                 const response = await api({ url: '/api/workorders', method: 'GET' });
                 response.workOrders && setWorkorders(response.workOrders);
             } catch (error) {
-                setErrorMsg('Something went wrong. Please try again later.');
-                // setErrorMsg(error.message); // receive error message from backend?
+                error instanceof Error && setErrorMsg(error.message);
             }
         })();
     }, []);

@@ -4,6 +4,9 @@ import { useHistory } from 'react-router-dom';
 /** Service Functions */
 import { api } from '../../services/api';
 
+/** Custom Components */
+import AlertMessage from '../AlertMessage';
+
 /** MUI Components */
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
@@ -38,7 +41,7 @@ const CreateWorkOrder: FunctionComponent = () => {
         e.preventDefault();
 
         if (!workOrderName) {
-            setErrorMsg('Please enter a work order name.');
+            setErrorMsg('Please enter a work order name before submitting the form.');
             return;
         }
 
@@ -47,12 +50,13 @@ const CreateWorkOrder: FunctionComponent = () => {
             console.log(response);
             if (response.status === 201) {
                 setErrorMsg('');
+                setUsers([]);
                 setWorkOrderName('');
                 setAssigneesId([]);
                 history.push('/workorders');
             }
         } catch (error) {
-            setErrorMsg('Something went wrong. Please try again later.');
+            error instanceof Error && setErrorMsg(error.message);
         }
     };
 
@@ -62,7 +66,7 @@ const CreateWorkOrder: FunctionComponent = () => {
                 <Box sx={{ marginTop: '50px' }}>
                     <Stack component="form" sx={{ width: '320px', textAlign: 'center' }} spacing={2} autoComplete="off" onSubmit={handleSubmit}>
                         <Typography variant="h5">Create Work Order Form</Typography>
-                        <TextField variant="standard" type="text" placeholder="Name" onChange={(e) => setWorkOrderName(e.target.value)} value={workOrderName} autoFocus required />
+                        <TextField variant="standard" type="text" placeholder="Name" onChange={(e) => setWorkOrderName(e.target.value)} value={workOrderName} autoFocus />
                         <Box>
                             <Stack spacing={1}>
                                 {users.map((user: IUser) => {
@@ -88,6 +92,7 @@ const CreateWorkOrder: FunctionComponent = () => {
                                 <Button type="submit" variant="contained" color="secondary">
                                     Create
                                 </Button>
+                                <div>{errorMsg && <AlertMessage errorMsg={errorMsg} />}</div>
                             </Stack>
                         </Box>
                     </Stack>

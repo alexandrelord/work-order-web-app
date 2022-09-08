@@ -20,7 +20,7 @@ const Productivity: FunctionComponent = () => {
                 const response = await api({ url: '/api/productivity', method: 'GET' });
                 response.users && setProductivity(response.users);
             } catch (error) {
-                setErrorMsg('Something went wrong. Please try again later.');
+                error instanceof Error && setErrorMsg(error.message);
             }
         })();
     }, []);
