@@ -7,19 +7,19 @@ import { getProductivity } from '../../api/productivity';
 import ProductivityTable from './ProductivityTable';
 import AlertMessage from '../AlertMessage';
 
+/** Types */
+import { IUser } from '../../types';
+
 const Productivity: FunctionComponent = () => {
-    const [productivity, setProductivity] = useState<any>([]);
+    const [productivity, setProductivity] = useState<IUser[]>([]);
     const [errorMsg, setErrorMsg] = useState<string>('');
 
     useEffect(() => {
         (async () => {
             try {
                 const response = await getProductivity();
-
-                setProductivity(response.users);
-                if (productivity.length === 0) {
-                    setErrorMsg('No productivity data found');
-                }
+                response.status === 200 && setProductivity(response.users);
+                response.status === 404 && setErrorMsg(response.message);
             } catch (error) {
                 setErrorMsg('Something went wrong. Please try again later.');
             }

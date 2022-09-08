@@ -1,4 +1,4 @@
-import { FunctionComponent, useState } from 'react';
+import { FunctionComponent } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 
 /** MUI Components */
@@ -16,7 +16,6 @@ interface WorkOrderProps {
 }
 
 const WorkOrdersTable: FunctionComponent<WorkOrderProps> = ({ workorders }) => {
-    const [rowId, setRowId] = useState<number>(0);
     const columns: GridColDef[] = [
         { field: 'name', headerName: 'Name', width: 250 },
         { field: 'status', headerName: 'Status', width: 150 }

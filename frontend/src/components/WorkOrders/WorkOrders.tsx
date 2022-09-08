@@ -7,22 +7,21 @@ import { getWorkOrders } from '../../api/workorders';
 import WorkOrdersTable from './WorkOrdersTable';
 import AlertMessage from '../AlertMessage';
 
+/** Types */
+import { IWorkOrder } from '../../types';
+
 const WorkOrders: FunctionComponent = () => {
-    const [workorders, setWorkorders] = useState<any[]>([]);
-    const [errorMsg, setErrorMsg] = useState<string>('');
+    const [workorders, setWorkorders] = useState<IWorkOrder[]>([] as IWorkOrder[]);
+    const [errorMsg, setErrorMsg] = useState<string>(''); // create useHook since it appears in multiple places? or too simple for that?
 
     useEffect(() => {
         (async () => {
             try {
                 const response = await getWorkOrders();
-                setWorkorders(response.workOrders);
-                if (response.status === 200) {
-                    setWorkorders(response);
-                } else if (workorders.length === 0) {
-                    setErrorMsg('No work orders found. Vacation time!');
-                }
+                response.status === 200 && setWorkorders(response.workOrders);
             } catch (error) {
                 setErrorMsg('Something went wrong. Please try again later.');
+                // setErrorMsg(error.message); // receive error message from backend?
             }
         })();
     }, []);

@@ -10,3 +10,8 @@ export interface IUser {
     name: string;
     email: string;
 }
+
+export interface INewWorkOrder {
+    workOrderName: string;
+    assigneesId?: number[];
+}

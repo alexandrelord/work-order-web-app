@@ -6,8 +6,11 @@ import Box from '@mui/material/Box';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import Typography from '@mui/material/Typography';
 
+/** Types */
+import { IUser } from '../../types';
+
 interface ProductivityProps {
-    productivity: any[];
+    productivity: IUser[];
 }
 
 const ProductivityTable: FunctionComponent<ProductivityProps> = ({ productivity }) => {
@@ -16,9 +19,9 @@ const ProductivityTable: FunctionComponent<ProductivityProps> = ({ productivity 
         { field: 'name', headerName: 'Name', width: 150 },
         { field: 'email', headerName: 'Email', width: 250 }
     ];
-    const rows: any[] = [];
+    const rows: IUser[] = [];
 
-    productivity.forEach((prod: any) => {
+    productivity.forEach((prod: IUser) => {
         rows.push({
             id: prod.id,
             name: prod.name,

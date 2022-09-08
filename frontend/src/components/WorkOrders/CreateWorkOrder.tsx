@@ -14,10 +14,13 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
 
+/** Types */
+import { IUser, INewWorkOrder } from '../../types';
+
 const CreateWorkOrder: FunctionComponent = () => {
-    const [users, setUsers] = useState<any[]>([]);
-    const [name, setName] = useState('');
-    const [assignees, setAssignees] = useState<any>([]);
+    const [users, setUsers] = useState<IUser[]>([]);
+    const [workOrderName, setWorkOrderName] = useState<string>('');
+    const [assigneesId, setAssigneesId] = useState<number[]>([]);
     const [errorMsg, setErrorMsg] = useState<string>('');
     const history = useHistory();
 
@@ -25,10 +28,8 @@ const CreateWorkOrder: FunctionComponent = () => {
         (async () => {
             try {
                 const response = await getUsers();
-                setUsers(response.users);
-                if (users.length === 0) {
-                    setErrorMsg('No users found. Everyone was fired!');
-                }
+                response.status === 200 && setUsers(response.users);
+                response.status === 404 && setErrorMsg(response.message);
             } catch (error) {
                 setErrorMsg('Something went wrong. Please try again later.');
             }
@@ -37,18 +38,29 @@ const CreateWorkOrder: FunctionComponent = () => {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const newWorkOrder = {
-            workOrderName: name,
-            assignees: assignees
-        };
+        let newWorkOrder: INewWorkOrder = {} as INewWorkOrder;
+
+        if (!workOrderName) {
+            setErrorMsg('Please enter a work order name.');
+            return;
+        } else if (assigneesId.length === 0) {
+            newWorkOrder = {
+                workOrderName
+            };
+        } else {
+            newWorkOrder = {
+                workOrderName,
+                assigneesId
+            };
+        }
 
         try {
             const response = await createWorkOrder(newWorkOrder);
 
-            if (response === 201) {
+            if (response.status === 201) {
                 setErrorMsg('');
-                setName('');
-                setAssignees([]);
+                setWorkOrderName('');
+                setAssigneesId([]);
                 history.push('/workorders');
             }
         } catch (error) {
@@ -62,24 +74,24 @@ const CreateWorkOrder: FunctionComponent = () => {
                 <Box sx={{ marginTop: '50px' }}>
                     <Stack component="form" sx={{ width: '320px', textAlign: 'center' }} spacing={2} autoComplete="off" onSubmit={handleSubmit}>
                         <Typography variant="h5">Create Work Order Form</Typography>
-                        <TextField variant="standard" type="text" placeholder="Name" onChange={(e) => setName(e.target.value)} value={name} autoFocus required />
+                        <TextField variant="standard" type="text" placeholder="Name" onChange={(e) => setWorkOrderName(e.target.value)} value={name} autoFocus required />
                         <Box>
                             <Stack spacing={1}>
-                                {users.map((user: any) => {
-                                    const userId: any = user.id;
+                                {users.map((user: IUser) => {
+                                    const userId: number = user.id;
                                     return (
                                         <Chip
                                             key={user.id}
                                             label={user.name}
-                                            color={assignees.includes(userId) ? 'success' : 'primary'}
+                                            color={assigneesId.includes(userId) ? 'success' : 'primary'}
                                             sx={{ textAlign: 'center' }}
                                             onClick={() => {
-                                                if (assignees.length === 0) {
-                                                    setAssignees([userId]);
-                                                } else if (!assignees.includes(userId)) {
-                                                    setAssignees((current: any) => [...current, userId]);
+                                                if (assigneesId.length === 0) {
+                                                    setAssigneesId([userId]);
+                                                } else if (!assigneesId.includes(userId)) {
+                                                    setAssigneesId((current: number[]) => [...current, userId]);
                                                 } else {
-                                                    setAssignees((current: any) => current.filter((id: any) => id !== userId));
+                                                    setAssigneesId((current: number[]) => current.filter((id: number) => id !== userId));
                                                 }
                                             }}
                                         />

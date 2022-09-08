@@ -1,3 +1,6 @@
+/** Types */
+import { INewWorkOrder } from '../types';
+
 const BASE_URL = '/api/workorders';
 
 export const getWorkOrders = async () => {
@@ -44,19 +47,15 @@ export const updateWorkOrder = async (id: string, status: string) => {
     }
 };
 
-export const createWorkOrder = async (workorder: any) => {
+export const createWorkOrder = async (workOrder: INewWorkOrder) => {
     const options = {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(workorder)
+        body: JSON.stringify(workOrder)
     };
     const response = await fetch(`${BASE_URL}/new`, options);
 
-    if (response.status === 201) {
-        return response.status;
-    } else {
-        return 'Error creating workorder';
-    }
+    return response.json();
 };
