@@ -2,7 +2,8 @@ import { FunctionComponent, useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
 /** Service Functions */
-import { getWorkOrder, updateWorkOrder } from '../../../api/workorders';
+// import { getWorkOrder, updateWorkOrder } from '../../../services/workorders';
+import { api } from '../../../services/api';
 
 /** Custom Components */
 import AlertMessage from '../../AlertMessage';
@@ -25,8 +26,8 @@ const WorkOrder: FunctionComponent = () => {
     useEffect(() => {
         (async () => {
             try {
-                const response = await getWorkOrder(id);
-                setWorkOrder(response.workOrder);
+                const response = await api({ url: `/api/workorders/${id}`, method: 'GET' });
+                response.workOrder && setWorkOrder(response.workOrder);
             } catch (error) {
                 setErrorMsg('Something went wrong. Please try again later.');
             }
@@ -36,8 +37,8 @@ const WorkOrder: FunctionComponent = () => {
 
     const handleChangeStatus = async () => {
         try {
-            const response = await updateWorkOrder(id, workOrder.status === 'OPEN' ? 'CLOSED' : 'OPEN');
-            setWorkOrder({ ...workOrder, status: response.workOrder[0].status });
+            const response = await api({ url: `/api/workorders/${id}`, method: 'PATCH', data: { status: workOrder.status === 'OPEN' ? 'CLOSED' : 'OPEN' } });
+            response.workOrder && setWorkOrder({ ...workOrder, status: response.workOrder[0].status });
         } catch (error) {
             setErrorMsg('Something went wrong. Please try again later.');
         }

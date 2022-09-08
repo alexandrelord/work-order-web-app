@@ -2,8 +2,7 @@ import { FunctionComponent, useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 
 /** Service Functions */
-import { getUsers } from '../../api/users';
-import { createWorkOrder } from '../../api/workorders';
+import { api } from '../../services/api';
 
 /** MUI Components */
 import Container from '@mui/material/Container';
@@ -15,7 +14,7 @@ import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
 
 /** Types */
-import { IUser, INewWorkOrder } from '../../types';
+import { IUser } from '../../types';
 
 const CreateWorkOrder: FunctionComponent = () => {
     const [users, setUsers] = useState<IUser[]>([]);
@@ -27,9 +26,8 @@ const CreateWorkOrder: FunctionComponent = () => {
     useEffect(() => {
         (async () => {
             try {
-                const response = await getUsers();
-                response.status === 200 && setUsers(response.users);
-                response.status === 404 && setErrorMsg(response.message);
+                const response = await api({ url: '/api/users', method: 'GET' });
+                response.users && setUsers(response.users);
             } catch (error) {
                 setErrorMsg('Something went wrong. Please try again later.');
             }
@@ -38,25 +36,15 @@ const CreateWorkOrder: FunctionComponent = () => {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        let newWorkOrder: INewWorkOrder = {} as INewWorkOrder;
 
         if (!workOrderName) {
             setErrorMsg('Please enter a work order name.');
             return;
-        } else if (assigneesId.length === 0) {
-            newWorkOrder = {
-                workOrderName
-            };
-        } else {
-            newWorkOrder = {
-                workOrderName,
-                assigneesId
-            };
         }
 
         try {
-            const response = await createWorkOrder(newWorkOrder);
-
+            const response = await api({ url: '/api/workorders/new', method: 'POST', data: { workOrderName, assigneesId } });
+            console.log(response);
             if (response.status === 201) {
                 setErrorMsg('');
                 setWorkOrderName('');
@@ -74,7 +62,7 @@ const CreateWorkOrder: FunctionComponent = () => {
                 <Box sx={{ marginTop: '50px' }}>
                     <Stack component="form" sx={{ width: '320px', textAlign: 'center' }} spacing={2} autoComplete="off" onSubmit={handleSubmit}>
                         <Typography variant="h5">Create Work Order Form</Typography>
-                        <TextField variant="standard" type="text" placeholder="Name" onChange={(e) => setWorkOrderName(e.target.value)} value={name} autoFocus required />
+                        <TextField variant="standard" type="text" placeholder="Name" onChange={(e) => setWorkOrderName(e.target.value)} value={workOrderName} autoFocus required />
                         <Box>
                             <Stack spacing={1}>
                                 {users.map((user: IUser) => {

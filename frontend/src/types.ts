@@ -11,7 +11,8 @@ export interface IUser {
     email: string;
 }
 
-export interface INewWorkOrder {
-    workOrderName: string;
-    assigneesId?: number[];
+export interface IResource<T> {
+    url: string;
+    method: string;
+    data?: T;
 }

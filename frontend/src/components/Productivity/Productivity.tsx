@@ -1,7 +1,7 @@
 import { FunctionComponent, useState, useEffect } from 'react';
 
 /** Service Functions */
-import { getProductivity } from '../../api/productivity';
+import { api } from '../../services/api';
 
 /** Custom Components */
 import ProductivityTable from './ProductivityTable';
@@ -17,9 +17,8 @@ const Productivity: FunctionComponent = () => {
     useEffect(() => {
         (async () => {
             try {
-                const response = await getProductivity();
-                response.status === 200 && setProductivity(response.users);
-                response.status === 404 && setErrorMsg(response.message);
+                const response = await api({ url: '/api/productivity', method: 'GET' });
+                response.users && setProductivity(response.users);
             } catch (error) {
                 setErrorMsg('Something went wrong. Please try again later.');
             }
