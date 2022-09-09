@@ -32,7 +32,7 @@ const CreateWorkOrder: FunctionComponent = () => {
                 const response = await api({ url: '/api/users', method: 'GET' });
                 response.users && setUsers(response.users);
             } catch (error) {
-                setErrorMsg('Something went wrong. Please try again later.');
+                error instanceof Error && setErrorMsg(error.message);
             }
         })();
     }, []);
