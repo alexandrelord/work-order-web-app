@@ -28,17 +28,17 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 app.use('/api/workorders', workOrderRoutes);
 app.use('/api/productivity', productivityRoutes);
 app.use('/api/users', userRoutes);
-
-/** Health Check */
-app.get('/ping', (req: Request, res: Response) => res.status(200).json({ message: 'pong' }));
-
-/** Error Handling */
 app.use((req: Request, res: Response) => {
     const error = new Error('Not found');
     return res.status(404).json({
         message: error.message
     });
 });
+
+/** Health Check */
+app.get('/ping', (req: Request, res: Response) => res.status(200).json({ message: 'pong' }));
+
+/** Error Handling */
 
 /**  Server */
 const PORT = 4000;
