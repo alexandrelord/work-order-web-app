@@ -1,5 +1,5 @@
-import { Request, Response } from 'express';
 import sql from '../../db';
+import { Request, Response } from 'express';
 import { IAssignees, IWorkOrder } from './types';
 
 const getWorkOrders = async (req: Request, res: Response) => {
@@ -26,8 +26,9 @@ const showWorkOrder = async (req: Request, res: Response) => {
             'SELECT work_orders.id AS workOrderId, work_orders.name AS workOrderName, work_orders.status AS workOrderStatus, users.id AS userId, users.name AS userName, users.email AS userEmail FROM work_orders LEFT JOIN work_order_assignees ON work_orders.id=work_order_assignees.work_order_id LEFT JOIN users ON work_order_assignees.user_id = users.id WHERE work_orders.id = ?',
             Number(id)
         );
+        console.log(response);
 
-        if (response[0].userId === null) {
+        if (!response[0].userId) {
             // If there are no assigneesId, return work order with no assigneesId
             const workOrder: { id: number; name: string; status: string } = {
                 id: response[0].workOrderId,
@@ -35,23 +36,22 @@ const showWorkOrder = async (req: Request, res: Response) => {
                 status: response[0].workOrderStatus
             };
             return res.status(200).json({ workOrder });
-        } else {
-            const assignees: IAssignees[] = response.map((assignee) => {
-                return {
-                    id: assignee.userId,
-                    name: assignee.userName,
-                    email: assignee.userEmail
-                };
-            });
-            // If there are assigneesId, return work order with array of assigneesId
-            const workOrder: IWorkOrder = {
-                id: response[0].workOrderId,
-                name: response[0].workOrderName,
-                status: response[0].workOrderStatus,
-                assignees
-            };
-            return res.status(200).json({ workOrder });
         }
+        // If there are assigneesId, return work order with array of assigneesId
+        const assignees: IAssignees[] = response.map((assignee) => {
+            return {
+                id: assignee.userId,
+                name: assignee.userName,
+                email: assignee.userEmail
+            };
+        });
+        const workOrder: IWorkOrder = {
+            id: response[0].workOrderId,
+            name: response[0].workOrderName,
+            status: response[0].workOrderStatus,
+            assignees
+        };
+        return res.status(200).json({ workOrder });
     } catch (error) {
         return res.status(500).json({ message: 'Something went wrong. Please try again later.' });
     }
