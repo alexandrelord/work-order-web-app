@@ -10,5 +10,5 @@
 
 ## Backend
 
-- [ ] In CreateWorkOrder controller update repeated SQL query
+- [x] In CreateWorkOrder controller update repeated SQL query
 - [x] Update types
