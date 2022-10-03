@@ -4,7 +4,7 @@ import { FunctionComponent, useState, useEffect } from 'react';
 import { api } from '../../services/api';
 
 /** Custom Components */
-import ProductivityTable from './ProductivityTable';
+import ProductivityTable from './Table/ProductivityTable';
 import AlertMessage from '../AlertMessage';
 
 /** Types */

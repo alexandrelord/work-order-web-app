@@ -3,8 +3,8 @@ import { Route, Switch } from 'react-router-dom';
 
 /** Custom Components */
 import Home from './components/Home/Home';
-import WorkOrders from './components/WorkOrders/WorkOrders';
-import WorkOrder from './components/WorkOrders/WorkOrder/WorkOrder';
+import WorkOrders from './components/WorkOrders/List/WorkOrders';
+import WorkOrder from './components/WorkOrders/Details/WorkOrder';
 import CreateWorkOrder from './components/WorkOrders/CreateForm/CreateWorkOrder';
 import Productivity from './components/Productivity/Productivity';
 import Layout from './components/Layout';

@@ -1,14 +1,14 @@
 import { FunctionComponent, useState, useEffect } from 'react';
 
 /** Service Functions */
-import { api } from '../../services/api';
+import { api } from '../../../services/api';
 
 /** Custom Components */
-import WorkOrdersTable from './WorkOrdersTable';
-import AlertMessage from '../AlertMessage';
+import WorkOrdersTable from './Table/WorkOrdersTable';
+import AlertMessage from '../../AlertMessage';
 
 /** Types */
-import { IWorkOrder } from '../../types';
+import { IWorkOrder } from '../../../types';
 
 const WorkOrders: FunctionComponent = () => {
     const [workorders, setWorkorders] = useState<IWorkOrder[]>([] as IWorkOrder[]);

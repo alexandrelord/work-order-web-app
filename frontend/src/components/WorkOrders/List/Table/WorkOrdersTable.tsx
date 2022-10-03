@@ -1,15 +1,16 @@
 import { FunctionComponent } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
+
+import styles from './Table.module.css';
 
 /** MUI Components */
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import { DataGrid, GridColDef, GridEventListener } from '@mui/x-data-grid';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
 /** Types */
-import { IWorkOrder } from '../../types';
+import { IWorkOrder } from '../../../../types';
 
 interface WorkOrderProps {
     workorders: IWorkOrder[];
@@ -17,8 +18,8 @@ interface WorkOrderProps {
 
 const WorkOrdersTable: FunctionComponent<WorkOrderProps> = ({ workorders }) => {
     const columns: GridColDef[] = [
-        { field: 'name', headerName: 'Name', width: 250 },
-        { field: 'status', headerName: 'Status', width: 150 }
+        { field: 'name', headerName: 'Name', minWidth: 350 },
+        { field: 'status', headerName: 'Status', minWidth: 225 }
     ];
     const rows: IWorkOrder[] = [];
     const history = useHistory();
@@ -36,20 +37,17 @@ const WorkOrdersTable: FunctionComponent<WorkOrderProps> = ({ workorders }) => {
     };
 
     return (
-        <Container maxWidth="sm">
-            <Box mt={10} style={{ height: 400, width: '100%' }}>
-                <Typography variant="h4" component="h1" gutterBottom>
-                    {' '}
-                    Work Orders{' '}
-                </Typography>
-                <DataGrid rows={rows} columns={columns} pageSize={5} rowsPerPageOptions={[5]} onRowClick={handleRowClick} />
-            </Box>
-        </Container>
+        <section>
+            <div className={styles.workorders}>
+                <div className={styles.header}>
+                    <p>List of Work Orders</p>
+                </div>
+                <div className={styles.tableContainer}>
+                    <DataGrid rows={rows} columns={columns} pageSize={5} rowsPerPageOptions={[5]} onRowClick={handleRowClick} />
+                </div>
+            </div>
+        </section>
     );
 };
 
 export default WorkOrdersTable;
-
-<Button component={Link} to="/" color="inherit">
-    Home
-</Button>;

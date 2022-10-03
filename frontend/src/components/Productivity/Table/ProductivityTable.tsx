@@ -1,13 +1,13 @@
 import { FunctionComponent } from 'react';
 
+/** CSS Module */
+import styles from './ProductivityTable.module.css';
+
 /** MUI Components */
-import Container from '@mui/material/Container';
-import Box from '@mui/material/Box';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import Typography from '@mui/material/Typography';
 
 /** Types */
-import { IUser } from '../../types';
+import { IUser } from '../../../types';
 
 interface ProductivityProps {
     productivity: IUser[];
@@ -30,15 +30,16 @@ const ProductivityTable: FunctionComponent<ProductivityProps> = ({ productivity 
     });
 
     return (
-        <Container maxWidth="sm">
-            <Box mt={10} style={{ height: 400, width: '100%' }}>
-                <Typography variant="h4" component="h1" gutterBottom>
-                    {' '}
-                    Workers not on any Assignements{' '}
-                </Typography>
-                <DataGrid rows={rows} columns={columns} pageSize={5} rowsPerPageOptions={[5]} />
-            </Box>
-        </Container>
+        <section>
+            <div className={styles.workorders}>
+                <div className={styles.header}>
+                    <p>Assignees w/o a Work Order</p>
+                </div>
+                <div className={styles.tableContainer}>
+                    <DataGrid rows={rows} columns={columns} pageSize={5} rowsPerPageOptions={[5]} />
+                </div>
+            </div>
+        </section>
     );
 };
 
