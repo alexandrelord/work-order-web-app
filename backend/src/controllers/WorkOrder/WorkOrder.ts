@@ -26,7 +26,6 @@ const showWorkOrder = async (req: Request, res: Response) => {
             'SELECT work_orders.id AS workOrderId, work_orders.name AS workOrderName, work_orders.status AS workOrderStatus, users.id AS userId, users.name AS userName, users.email AS userEmail FROM work_orders LEFT JOIN work_order_assignees ON work_orders.id=work_order_assignees.work_order_id LEFT JOIN users ON work_order_assignees.user_id = users.id WHERE work_orders.id = ?',
             Number(id)
         );
-        console.log(response);
 
         if (!response[0].userId) {
             // If there are no assigneesId, return work order with no assigneesId
