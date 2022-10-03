@@ -2,7 +2,7 @@ import { FunctionComponent } from 'react';
 import { Route, Switch } from 'react-router-dom';
 
 /** Custom Components */
-import Home from './components/Home';
+import Home from './components/Home/Home';
 import WorkOrders from './components/WorkOrders/WorkOrders';
 import WorkOrder from './components/WorkOrders/WorkOrder/WorkOrder';
 import CreateWorkOrder from './components/WorkOrders/CreateWorkOrder';

@@ -2,14 +2,13 @@ import { FunctionComponent, useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
 /** Service Functions */
-// import { getWorkOrder, updateWorkOrder } from '../../../services/workorders';
 import { api } from '../../../services/api';
 
 /** Custom Components */
 import AlertMessage from '../../AlertMessage';
 
 /** CSS module */
-import './WorkOrder.css';
+import styles from './WorkOrder.module.css';
 
 /** Types */
 import { IWorkOrder, IUser } from '../../../types';
@@ -46,32 +45,32 @@ const WorkOrder: FunctionComponent = () => {
     const renderWorkOrder = () => {
         return (
             <section>
-                <div className="workorder">
-                    <div className="header">
+                <div className={styles.workorder}>
+                    <div className={styles.header}>
                         <p>Work Order #{workOrder.id}</p>
                     </div>
 
-                    <div className="body">
-                        <div className="name">
+                    <div className={styles.body}>
+                        <div className={styles.name}>
                             <h2>{workOrder.name}</h2>
                         </div>
                         <hr />
-                        <div className="status">
-                            <div className="statusText">
+                        <div className={styles.status}>
+                            <div className={styles.statusText}>
                                 <h3>Status:</h3>
-                                <p className={workOrder.status === 'OPEN' ? 'open' : 'closed'}>{workOrder.status}</p>
+                                <p className={workOrder.status === 'OPEN' ? `${styles.open}` : `${styles.closed}`}>{workOrder.status}</p>
                             </div>
                             <button onClick={handleChangeStatus}>Change Status</button>
                         </div>
                         <hr />
-                        <div className="assignees">
+                        <div className={styles.assgnees}>
                             <h3>Assignees:</h3>
-                            <div className="assignee">
+                            <div className={styles.asignee}>
                                 {workOrder.assignees
                                     ? workOrder.assignees.map((assignee: IUser) => (
-                                          <p className="tooltip" key={assignee.id}>
+                                          <p className={styles.tooltip} key={assignee.id}>
                                               {assignee.name}
-                                              <span className="tooltipText">{assignee.email}</span>
+                                              <span className={styles.tooltipText}>{assignee.email}</span>
                                           </p>
                                       ))
                                     : null}
