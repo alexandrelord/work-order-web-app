@@ -1,0 +1,47 @@
+section {
+    max-width: 600px;
+    margin: 50px auto;
+    border: #1976d2 1px solid;
+    border-radius: 5px;
+}
+
+.workorder {
+    display: flex;
+    flex-direction: column;
+}
+
+.header {
+    width: 100%;
+    background-color: #1976d2;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    font-size: 1.5em;
+}
+
+.body {
+    padding: 20px;
+}
+
+.name {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 20px 0;
+}
+
+.name input {
+    width: 85%;
+    font-size: x-large;
+    color: #1976d2;
+}
+
+.assignees {
+    margin: 20px 0;
+}
+
+.footer {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
