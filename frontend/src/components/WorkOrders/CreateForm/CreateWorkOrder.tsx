@@ -17,24 +17,15 @@ import Chip from '@mui/material/Chip';
 /** Types */
 import { IUser } from '../../../types';
 
+/** Custom Hook */
+import useFetch from '../../../hooks/useFetch';
+
 const CreateWorkOrder = () => {
-    const [users, setUsers] = useState<IUser[]>([]);
+    const { data: users, errorMsg, setData: setUsers, setErrorMsg } = useFetch<IUser[]>('/api/users', 'GET');
     const [workOrderName, setWorkOrderName] = useState('');
     const [assigneesId, setAssigneesId] = useState<number[]>([]);
-    const [errorMsg, setErrorMsg] = useState('');
-    const history = useHistory();
 
-    useEffect(() => {
-        (async () => {
-            try {
-                // fetch all workers
-                const response = await api({ url: '/api/users', method: 'GET' });
-                response.users && setUsers(response.users);
-            } catch (error) {
-                error instanceof Error && setErrorMsg(error.message);
-            }
-        })();
-    }, []);
+    const history = useHistory();
 
     useEffect(() => {
         setErrorMsg('');
@@ -50,7 +41,6 @@ const CreateWorkOrder = () => {
 
         try {
             const response = await api({ url: '/api/workorders/new', method: 'POST', data: { workOrderName, assigneesId } });
-            console.log(response);
             if (response.status === 201) {
                 setErrorMsg('');
                 setUsers([]);
@@ -67,27 +57,28 @@ const CreateWorkOrder = () => {
         return (
             <div className={styles.assignees}>
                 <div className={styles.assigneesList}>
-                    {users.map((user: IUser) => {
-                        const userId: number = user.id;
-                        return (
-                            <Chip
-                                key={user.id}
-                                label={user.name}
-                                color={assigneesId.includes(userId) ? 'success' : 'primary'}
-                                sx={{ textAlign: 'center', margin: '0.5rem', fontSize: '1rem' }}
-                                size="medium"
-                                onClick={() => {
-                                    if (assigneesId.length === 0) {
-                                        setAssigneesId([userId]);
-                                    } else if (!assigneesId.includes(userId)) {
-                                        setAssigneesId((current: number[]) => [...current, userId]);
-                                    } else {
-                                        setAssigneesId((current: number[]) => current.filter((id: number) => id !== userId));
-                                    }
-                                }}
-                            />
-                        );
-                    })}
+                    {users &&
+                        users.map((user: IUser) => {
+                            const userId: number = user.id;
+                            return (
+                                <Chip
+                                    key={user.id}
+                                    label={user.name}
+                                    color={assigneesId.includes(userId) ? 'success' : 'primary'}
+                                    sx={{ textAlign: 'center', margin: '0.5rem', fontSize: '1rem' }}
+                                    size="medium"
+                                    onClick={() => {
+                                        if (assigneesId.length === 0) {
+                                            setAssigneesId([userId]);
+                                        } else if (!assigneesId.includes(userId)) {
+                                            setAssigneesId((current: number[]) => [...current, userId]);
+                                        } else {
+                                            setAssigneesId((current: number[]) => current.filter((id: number) => id !== userId));
+                                        }
+                                    }}
+                                />
+                            );
+                        })}
                 </div>
             </div>
         );

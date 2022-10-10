@@ -1,8 +1,3 @@
-import { FunctionComponent, useState, useEffect } from 'react';
-
-/** Service Functions */
-import { api } from '../../../services/api';
-
 /** Custom Components */
 import WorkOrdersTable from './Table/WorkOrdersTable';
 import AlertMessage from '../../AlertMessage';
@@ -10,22 +5,18 @@ import AlertMessage from '../../AlertMessage';
 /** Types */
 import { IWorkOrder } from '../../../types';
 
-const WorkOrders: FunctionComponent = () => {
-    const [workorders, setWorkorders] = useState<IWorkOrder[]>([] as IWorkOrder[]);
-    const [errorMsg, setErrorMsg] = useState<string>('');
+/** Custom Hook */
+import useFetch from '../../../hooks/useFetch';
 
-    useEffect(() => {
-        (async () => {
-            try {
-                const response = await api({ url: '/api/workorders', method: 'GET' });
-                response.workOrders && setWorkorders(response.workOrders);
-            } catch (error) {
-                error instanceof Error && setErrorMsg(error.message);
-            }
-        })();
-    }, []);
-
-    return <div>{workorders.length > 0 ? <WorkOrdersTable workorders={workorders} /> : <AlertMessage errorMsg={errorMsg} />}</div>;
+const WorkOrders = () => {
+    const { data: workOrders, errorMsg } = useFetch<IWorkOrder[]>('/api/workorders', 'GET');
+    console.log(workOrders);
+    return (
+        <div>
+            {errorMsg && <AlertMessage errorMsg={errorMsg} />}
+            {workOrders && <WorkOrdersTable workOrders={workOrders} />}
+        </div>
+    );
 };
 
 export default WorkOrders;

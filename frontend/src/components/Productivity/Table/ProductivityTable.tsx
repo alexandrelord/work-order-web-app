@@ -1,5 +1,3 @@
-import { FunctionComponent } from 'react';
-
 /** CSS Module */
 import styles from './ProductivityTable.module.css';
 
@@ -9,11 +7,11 @@ import { DataGrid, GridColDef } from '@mui/x-data-grid';
 /** Types */
 import { IUser } from '../../../types';
 
-interface ProductivityProps {
-    productivity: IUser[];
+interface IProductivityTableProps {
+    users: IUser[];
 }
 
-const ProductivityTable: FunctionComponent<ProductivityProps> = ({ productivity }) => {
+const ProductivityTable = ({ users }: IProductivityTableProps) => {
     const columns: GridColDef[] = [
         { field: 'id', headerName: 'Id', width: 75 },
         { field: 'name', headerName: 'Name', width: 150 },
@@ -21,7 +19,7 @@ const ProductivityTable: FunctionComponent<ProductivityProps> = ({ productivity 
     ];
     const rows: IUser[] = [];
 
-    productivity.forEach((prod: IUser) => {
+    users.forEach((prod: IUser) => {
         rows.push({
             id: prod.id,
             name: prod.name,

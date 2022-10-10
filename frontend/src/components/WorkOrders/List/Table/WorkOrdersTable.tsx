@@ -1,22 +1,19 @@
-import { FunctionComponent } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import styles from './Table.module.css';
 
 /** MUI Components */
-import Container from '@mui/material/Container';
-import Box from '@mui/material/Box';
 import { DataGrid, GridColDef, GridEventListener } from '@mui/x-data-grid';
-import Typography from '@mui/material/Typography';
 
 /** Types */
 import { IWorkOrder } from '../../../../types';
 
+// because props is the top-level object, we should use an interface or type to define the type of the props object
 interface WorkOrderProps {
-    workorders: IWorkOrder[];
+    workOrders: IWorkOrder[];
 }
 
-const WorkOrdersTable: FunctionComponent<WorkOrderProps> = ({ workorders }) => {
+const WorkOrdersTable = ({ workOrders }: WorkOrderProps) => {
     const columns: GridColDef[] = [
         { field: 'name', headerName: 'Name', minWidth: 350 },
         { field: 'status', headerName: 'Status', minWidth: 225 }
@@ -24,7 +21,7 @@ const WorkOrdersTable: FunctionComponent<WorkOrderProps> = ({ workorders }) => {
     const rows: IWorkOrder[] = [];
     const history = useHistory();
 
-    workorders.forEach((workorder: IWorkOrder) => {
+    workOrders.forEach((workorder: IWorkOrder) => {
         rows.push({
             id: workorder.id,
             name: workorder.name,
