@@ -7,7 +7,7 @@ const getUsers = async (req: Request, res: Response) => {
         const response = await sql('SELECT * FROM users');
 
         if (response.length > 0) {
-            return res.status(200).json({ users: response });
+            return res.status(200).json({ data: response });
         } else {
             return res.status(404).json({ message: 'No users found.' });
         }

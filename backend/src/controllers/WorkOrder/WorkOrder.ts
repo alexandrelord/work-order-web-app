@@ -8,7 +8,7 @@ const getWorkOrders = async (req: Request, res: Response) => {
         const response = await sql('SELECT * FROM work_orders ORDER BY CASE WHEN status = "OPEN" THEN 1 WHEN status = "CLOSED" THEN 2 ELSE 3 END');
 
         if (response.length > 0) {
-            return res.status(200).json({ workOrders: response });
+            return res.status(200).json({ data: response });
         } else {
             return res.status(404).json({ message: 'No work orders found.' });
         }
@@ -34,7 +34,7 @@ const showWorkOrder = async (req: Request, res: Response) => {
                 name: response[0].workOrderName,
                 status: response[0].workOrderStatus
             };
-            return res.status(200).json({ workOrder });
+            return res.status(200).json({ data: workOrder });
         }
         // If there are assigneesId, return work order with array of assigneesId
         const assignees: IAssignees[] = response.map((assignee) => {
@@ -50,7 +50,7 @@ const showWorkOrder = async (req: Request, res: Response) => {
             status: response[0].workOrderStatus,
             assignees
         };
-        return res.status(200).json({ workOrder });
+        return res.status(200).json({ data: workOrder });
     } catch (error) {
         return res.status(500).json({ message: 'Something went wrong. Please try again later.' });
     }
@@ -81,7 +81,7 @@ const updateWorkOrder = async (req: Request, res: Response) => {
     try {
         // Update the status of the work order
         const response = await sql('UPDATE work_orders SET status = ? WHERE id = ? RETURNING *', status, Number(id));
-        return res.status(200).json({ workOrder: response });
+        return res.status(200).json({ data: response });
     } catch (error) {
         return res.status(500).json({ message: 'Something went wrong. Please try again later.' });
     }
