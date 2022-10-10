@@ -21,7 +21,7 @@ import { IUser } from '../../../types';
 import useFetch from '../../../hooks/useFetch';
 
 const CreateWorkOrder = () => {
-    const { data: users, errorMsg, setData: setUsers, setErrorMsg } = useFetch<IUser[]>('/api/users', 'GET');
+    const { data: users, errorMsg, setErrorMsg } = useFetch<IUser[]>('/api/users', 'GET');
     const [workOrderName, setWorkOrderName] = useState('');
     const [assigneesId, setAssigneesId] = useState<number[]>([]);
 
@@ -42,10 +42,6 @@ const CreateWorkOrder = () => {
         try {
             const response = await api({ url: '/api/workorders/new', method: 'POST', data: { workOrderName, assigneesId } });
             if (response.status === 201) {
-                setErrorMsg('');
-                setUsers([]);
-                setWorkOrderName('');
-                setAssigneesId([]);
                 history.push('/workorders');
             }
         } catch (error) {

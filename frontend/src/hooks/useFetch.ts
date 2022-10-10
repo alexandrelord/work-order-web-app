@@ -17,7 +17,7 @@ const useFetch = <T>(url: string, method: string) => {
         })();
     }, [url, method]);
 
-    return { data, errorMsg, setData, setErrorMsg };
+    return { data, errorMsg, setErrorMsg };
 };
 
 export default useFetch;
