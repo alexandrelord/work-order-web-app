@@ -1,5 +1,5 @@
 import express from 'express';
-import { getInactiveUsers } from '../controllers/Productivity';
+import { getInactiveUsers } from '../controllers/productivity/productivity';
 
 const router = express.Router();
 

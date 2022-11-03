@@ -1,5 +1,5 @@
 import express from 'express';
-import { getWorkOrders, showWorkOrder, createWorkOrder, updateWorkOrder } from '../controllers/WorkOrder/WorkOrder';
+import { getWorkOrders, showWorkOrder, createWorkOrder, updateWorkOrder } from '../controllers/work-orders/workOrders';
 
 const router = express.Router();
 

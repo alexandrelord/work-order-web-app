@@ -1,7 +1,7 @@
 import Router, { Request, Response } from 'express';
 import productivityRoutes from './productivity';
-import userRoutes from './user';
-import workOrderRoutes from './workOrder';
+import userRoutes from './users';
+import workOrderRoutes from './workOrders';
 
 const router = Router();
 

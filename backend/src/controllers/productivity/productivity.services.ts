@@ -1,22 +1,14 @@
-import { Request, Response } from 'express';
-import sql from '../db';
+import sql from '../../db';
+import { StatusError } from '../../services/global.services';
 
-const getInactiveUsers = async (req: Request, res: Response) => {
-    try {
-        // Get all users who are not assigned to any open work order
-        const response = await sql('SELECT * FROM users WHERE id NOT IN (SELECT user_id FROM work_order_assignees WHERE work_order_id IN (SELECT id FROM work_orders WHERE status = "OPEN"))');
+export const queryInactiveUsers = async () => {
+    const response = await sql('SELECT * FROM users WHERE id NOT IN (SELECT user_id FROM work_order_assignees WHERE work_order_id IN (SELECT id FROM work_orders WHERE status = "OPEN"))');
 
-        if (response.length > 0) {
-            return res.status(200).json({ data: response });
-        } else {
-            return res.status(404).json({ message: 'No users found.' });
-        }
-    } catch (error) {
-        return res.status(500).json({ message: 'Something went wrong. Please try again later.' });
+    if (!response.length) {
+        throw new StatusError('No inactive users found.', 404);
     }
+    return response;
 };
-
-export { getInactiveUsers };
 
 //** Backtracking SQL Logic */
 /*
