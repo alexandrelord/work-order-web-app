@@ -4,8 +4,8 @@
     "proseWrap": "always",
     "tabWidth": 4,
     "useTabs": false,
-    "trailingComma": "none",
+    "trailingComma": "all",
     "bracketSpacing": true,
-    "jsxBracketSameLine": false,
+    "--bracket-same-line": false,
     "semi": true
 }
